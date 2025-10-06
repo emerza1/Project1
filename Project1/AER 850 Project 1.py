@@ -22,3 +22,14 @@ print(df['Step'].value_counts())
 df.hist(bins=30, figsize=(10, 8))
 plt.suptitle("Feature Distributions", fontsize=16)
 plt.show()
+
+import seaborn as sns
+
+# Correlation matrix
+print("\nCorrelation Matrix:")
+corr_matrix = df.corr()
+print(abs(corr_matrix))
+
+sns.heatmap(corr_matrix, annot=True)
+plt.title("Correlation Matrix")
+plt.show()
