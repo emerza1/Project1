@@ -233,3 +233,29 @@ plt.xlabel('Predicted Label')
 plt.ylabel('True Label')
 plt.tight_layout()
 plt.show()
+
+# Save the best model using joblib
+import joblib
+
+# Save the best model (SVM in this case)
+joblib.dump(best_svm_est, 'best_maintenance_model_svm.joblib')
+print("SVM Model saved as 'best_maintenance_model_svm.joblib'")
+
+# Load the saved model
+loaded_model = joblib.load('best_maintenance_model_svm.joblib')
+
+# New data for prediction
+new_data = [
+    [9.375, 3.0625, 1.51],
+    [6.995, 5.125, 0.3875],
+    [0, 3.0625, 1.93],
+    [9.4, 3, 1.8],
+    [9.4, 3, 1.3]
+]
+
+# Predict the maintenance steps for the new data
+predictions = loaded_model.predict(new_data)
+
+# Print the predictions
+print("Predictions for the new data:")
+print(predictions)
