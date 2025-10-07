@@ -138,3 +138,63 @@ print("Best CV Score:", rand_gb.best_score_)
 y_pred_gb = rand_gb.best_estimator_.predict(X_test)
 print("Test Accuracy:", accuracy_score(y_test, y_pred_gb))
 print(classification_report(y_test, y_pred_gb))
+
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+
+# Dictionary to store models
+models = {
+    "Logistic Regression": grid_lr.best_estimator_,
+    "Random Forest": grid_rf.best_estimator_,
+    "SVM": grid_svm.best_estimator_,
+    "Gradient Boosting": rand_gb.best_estimator_
+}
+
+results = []
+
+for name, model in models.items():
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    prec = precision_score(y_test, y_pred, average="weighted")
+    rec = recall_score(y_test, y_pred, average="weighted")
+    f1 = f1_score(y_test, y_pred, average="weighted")
+
+    results.append([name, acc, prec, rec, f1])
+
+# Convert results to DataFrame
+results_df = pd.DataFrame(results, columns=["Model", "Accuracy", "Precision", "Recall", "F1 Score"])
+print(results_df)
+
+# Select the best performance for each model
+best_lr = grid_lr.best_score_
+best_rf = grid_rf.best_score_
+best_svm = grid_svm.best_score_
+
+# Confusion Matrix for each model
+cm1 = confusion_matrix(y_test, y_pred_lr)
+cm2 = confusion_matrix(y_test, y_pred_rf)
+cm3 = confusion_matrix(y_test, y_pred_svm)
+
+# Visualize the confusion matrix using a heatmap
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm1, annot=True, fmt='d', cmap='Blues', xticklabels=df['Step'].unique(), yticklabels=df['Step'].unique())
+plt.title('Confusion Matrix for Logistic Regression')
+plt.xlabel('Predicted Label')
+plt.ylabel('True Label')
+plt.show()
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm2, annot=True, fmt='d', cmap='Blues', xticklabels=df['Step'].unique(), yticklabels=df['Step'].unique())
+plt.title('Confusion Matrix for Random Forest')
+plt.xlabel('Predicted Label')
+plt.ylabel('True Label')
+plt.show()
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm3, annot=True, fmt='d', cmap='Blues', xticklabels=df['Step'].unique(), yticklabels=df['Step'].unique())
+plt.title('Confusion Matrix for Support Vector Machine')
+plt.xlabel('Predicted Label')
+plt.ylabel('True Label')
+plt.show()
+
+
+
